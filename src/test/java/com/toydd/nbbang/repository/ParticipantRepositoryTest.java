@@ -1,8 +1,9 @@
 package com.toydd.nbbang.repository;
 
-import com.toydd.nbbang.service.domain.Participant;
-import com.toydd.nbbang.service.domain.Party;
-import org.junit.jupiter.api.Assertions;
+import com.toydd.nbbang.participant.ParticipantRepository;
+import com.toydd.nbbang.party.PartyRepository;
+import com.toydd.nbbang.participant.Participant;
+import com.toydd.nbbang.party.Party;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,8 +25,7 @@ public class ParticipantRepositoryTest {
         Participant participant = new Participant();
         participant.setName("delf");
 
-        Party party = new Party();
-        party.setName("group_name");
+        Party party = Party.builder().name("group_name").build();
 
         participant.setParty(party);
 

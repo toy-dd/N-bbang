@@ -1,7 +1,6 @@
-package com.toydd.nbbang.controller;
+package com.toydd.nbbang.example;
 
 import com.toydd.nbbang.model.request.ExampleSaveDto;
-import com.toydd.nbbang.service.ExampleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,7 +20,7 @@ public class ExampleController {
         this.exampleService = exampleService;
     }
 
-    @Operation(summary = "example")
+    @Operation(summary = "")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "ok"),
             @ApiResponse(responseCode = "400", description = "bad request"),

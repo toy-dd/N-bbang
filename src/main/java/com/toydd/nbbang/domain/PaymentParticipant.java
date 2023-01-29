@@ -1,6 +1,7 @@
-package com.toydd.nbbang.service.domain;
+package com.toydd.nbbang.domain;
 
-import com.toydd.nbbang.repository.converter.BooleanToYnConverter;
+import com.toydd.nbbang.participant.Participant;
+import com.toydd.nbbang.payment.Payment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class PaymentParticipant {
+public class PaymentParticipant extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

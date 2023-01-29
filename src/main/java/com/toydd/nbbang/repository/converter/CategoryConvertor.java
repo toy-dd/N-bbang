@@ -1,6 +1,6 @@
 package com.toydd.nbbang.repository.converter;
 
-import com.toydd.nbbang.service.domain.Category;
+import com.toydd.nbbang.payment.Category;
 
 import javax.persistence.AttributeConverter;
 
