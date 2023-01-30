@@ -1,6 +1,9 @@
-package com.toydd.nbbang.service.domain;
+package com.toydd.nbbang.payment;
 
+import com.toydd.nbbang.party.Party;
 import com.toydd.nbbang.repository.converter.CategoryConvertor;
+import com.toydd.nbbang.domain.BaseEntity;
+import com.toydd.nbbang.domain.PaymentParticipant;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Payment {
+public class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

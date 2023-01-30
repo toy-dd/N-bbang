@@ -1,6 +1,5 @@
-package com.toydd.nbbang.repository;
+package com.toydd.nbbang.participant;
 
-import com.toydd.nbbang.service.domain.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {

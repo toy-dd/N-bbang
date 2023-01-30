@@ -1,4 +1,4 @@
-package com.toydd.nbbang.service.domain;
+package com.toydd.nbbang.payment;
 
 import lombok.Getter;
 

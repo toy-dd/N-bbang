@@ -1,6 +1,7 @@
 package com.toydd.nbbang.repository;
 
-import com.toydd.nbbang.service.domain.Party;
+import com.toydd.nbbang.party.Party;
+import com.toydd.nbbang.party.PartyRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,8 +16,7 @@ public class PartyRepositoryTest {
 
     @Test
     Party saveParty() {
-        Party party = new Party();
-        party.setName("test-party");
+        Party party = Party.builder().name("test-party").build();
         assertEquals(party, partyRepository.save(party));
 
         return party;

@@ -1,4 +1,4 @@
-package com.toydd.nbbang.service;
+package com.toydd.nbbang.example;
 
 import org.springframework.stereotype.Service;
 
