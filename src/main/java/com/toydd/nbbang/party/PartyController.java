@@ -1,6 +1,7 @@
 package com.toydd.nbbang.party;
 
 import com.toydd.nbbang.model.request.PartyCreateDto;
+import com.toydd.nbbang.model.request.PartyUpdateDto;
 import com.toydd.nbbang.model.response.IdDto;
 import com.toydd.nbbang.model.response.PartyDto;
 import io.swagger.annotations.ApiImplicitParam;
@@ -54,6 +55,19 @@ public class PartyController {
 
         party = partyService.saveParty(party);
         // todo: 예외처리, 그에 따른 적절한 응답
-        return Mono.just(IdDto.builder().id(party.getId()).build());
+        return Mono.just(IdDto.of(party));
     }
+
+    @Operation(summary = "모임 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "body", dataTypeClass = PartyUpdateDto.class, required = true)
+    })
+    // TODO 부분 업데이트니까 PATCH가 더 맞지 않을까?
+    @PutMapping("/{partyId}")
+    public Mono<IdDto> updateParty(@PathVariable Long partyId,
+                                   @RequestBody PartyUpdateDto body) {
+        Party party = partyService.update(partyId, body);
+        return Mono.just(IdDto.of(party));
+    }
+
 }

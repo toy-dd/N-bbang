@@ -1,14 +1,20 @@
 package com.toydd.nbbang.party;
 
 import com.toydd.nbbang.domain.BaseEntity;
+import com.toydd.nbbang.model.mapper.PartyMapper;
+import com.toydd.nbbang.model.request.PartyUpdateDto;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@DynamicUpdate
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "id", callSuper = true)
 public class Party extends BaseEntity {
 
     @Id
@@ -34,4 +40,9 @@ public class Party extends BaseEntity {
         this.startAt = startAt;
         this.endAt = endAt;
     }
+
+    public void update(PartyUpdateDto body) {
+        PartyMapper.INSTANCE.updateFromDto(this, body);
+    }
+
 }
