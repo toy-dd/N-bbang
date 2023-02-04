@@ -28,4 +28,11 @@ public class  PartyService {
         party.update(body);
         return party;
     }
+
+    @Transactional
+    public void delete(Long partyId) {
+        partyRepository.deleteById(partyId);
+        // TODO 모임이 삭제되었음을 모임원들에게 알려주는 알림 기능 넣기?
+        // TODO 모임원이 만장일치 삭제 동의하지 않았으면 삭제 못하게 하기?
+    }
 }

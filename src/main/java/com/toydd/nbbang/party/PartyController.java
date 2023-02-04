@@ -70,4 +70,11 @@ public class PartyController {
         return Mono.just(IdDto.of(party));
     }
 
+    @Operation(summary = "모임 삭제")
+    @DeleteMapping("/{partyId}")
+    public Mono<Void> deleteParty(@PathVariable Long partyId) {
+        partyService.delete(partyId);
+        return Mono.empty();
+    }
+
 }
