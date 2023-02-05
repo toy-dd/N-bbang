@@ -62,8 +62,7 @@ public class PartyController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "body", dataTypeClass = PartyUpdateDto.class, required = true)
     })
-    // TODO 부분 업데이트니까 PATCH가 더 맞지 않을까?
-    @PutMapping("/{partyId}")
+    @PatchMapping("/{partyId}")
     public Mono<IdDto> updateParty(@PathVariable Long partyId,
                                    @RequestBody PartyUpdateDto body) {
         Party party = partyService.update(partyId, body);
