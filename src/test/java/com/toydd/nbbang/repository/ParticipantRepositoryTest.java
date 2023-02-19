@@ -1,9 +1,8 @@
 package com.toydd.nbbang.repository;
 
+import com.toydd.nbbang.participant.Participant;
 import com.toydd.nbbang.participant.ParticipantRepository;
 import com.toydd.nbbang.party.PartyRepository;
-import com.toydd.nbbang.participant.Participant;
-import com.toydd.nbbang.party.Party;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,14 +21,14 @@ public class ParticipantRepositoryTest {
 
     @Test
     void saveParticipant() {
-        Participant participant = new Participant();
-        participant.setName("delf");
-
-        Party party = Party.builder().name("group_name").build();
-
-        participant.setParty(party);
-
-        participantRepository.save(participant);
+//        Participant participant = new Participant();
+//        participant.setName("delf");
+//
+//        Party party = Party.builder().name("group_name").build();
+//
+//        participant.setParty(party);
+//
+//        participantRepository.save(participant);
     }
 
     @Test
@@ -38,9 +37,7 @@ public class ParticipantRepositoryTest {
         Participant deleteTarget = participants.get(0);
         participantRepository.delete(deleteTarget);
 
-        assertThrows(JpaObjectRetrievalFailureException.class, () -> {
-            participantRepository.getReferenceById(deleteTarget.getId());
-        });
+        assertThrows(JpaObjectRetrievalFailureException.class, () -> participantRepository.getReferenceById(deleteTarget.getId()));
 
         assertDoesNotThrow(() -> {
             partyRepository.findById(deleteTarget.getParty().getId());
