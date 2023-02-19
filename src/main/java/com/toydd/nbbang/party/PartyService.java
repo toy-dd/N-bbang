@@ -15,7 +15,7 @@ public class  PartyService {
     }
 
     public Party retrieveParty(Long partyId) {
-        return partyRepository.getReferenceById(partyId);
+        return partyRepository.findById(partyId).orElseThrow(NotFoundException::new);
     }
 
     public Party saveParty(Party party) {
