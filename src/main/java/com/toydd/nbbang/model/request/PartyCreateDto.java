@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @ApiModel
 @Getter
 @ToString
@@ -17,8 +19,8 @@ public class PartyCreateDto {
     private String description;
 
     @Schema(description = "시작일", required = true)
-    private String startAt;
+    private LocalDateTime startAt;
 
     @Schema(description = "종료일", required = true)
-    private String endAt;
+    private LocalDateTime endAt;
 }

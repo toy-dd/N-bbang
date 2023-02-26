@@ -18,68 +18,78 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import javax.validation.Valid;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1/parties")
 public class ParticipantController {
 
-    private final ParticipantService participantService;
-    private final PartyService partyService;
+	private final ParticipantService participantService;
+	private final PartyService partyService;
 
-    public ParticipantController(ParticipantService participantService, PartyService partyService) {
-        this.participantService = participantService;
-        this.partyService = partyService;
-    }
+	@Operation(summary = "모임 참여자 목록 조회")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true)
+	})
+	@GetMapping("/{partyId}/participants")
+	public Flux<ParticipantDto> retrieveParticipant(@PathVariable Long partyId) {
+		List<Participant> participantList = participantService.retrieveParticipants(partyId);
 
-    @Operation(summary = "모임 참여자 목록 조회")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true)
-    })
-    @GetMapping("/{partyId}/participants")
-    public Flux<ParticipantDto> retrieveParticipant(@PathVariable Long partyId) {
-        List<Participant> participantList = participantService.retrieveParticipants(partyId);
+		return Flux.fromIterable(participantList.stream()
+				.map(e -> ParticipantDto.builder()
+						.id(e.getId())
+						.name(e.getName())
+						.email(e.getEmail())
+						.build())
+				.collect(toList()));
+	}
 
-        return Flux.fromIterable(participantList.stream()
-                .map(e -> ParticipantDto.builder()
-                    .id(e.getId())
-                    .name(e.getName())
-                    .email(e.getEmail())
-                    .build())
-                .collect(toList()));
-    }
+	@Operation(summary = "모임 참여자 등록")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true),
+			@ApiImplicitParam(name = "body", dataTypeClass = ParticipantCreateDto.class, required = true)
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping("/{partyId}/participants")
+	public Flux<IdDto> createParticipant(@PathVariable Long partyId, @RequestBody List<ParticipantCreateDto> body) {
+		try {
+			List<IdDto> responseDtoList = participantService.saveParticipant(partyId, body);
+			return Flux.fromIterable(responseDtoList);
 
-    @Operation(summary = "모임 참여자 등록")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true),
-            @ApiImplicitParam(name = "body", dataTypeClass = ParticipantCreateDto.class, required = true)
-    })
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{partyId}/participants")
-    public Flux<IdDto> createParticipant(@PathVariable Long partyId, @RequestBody List<ParticipantCreateDto> body) {
-        try {
-            List<IdDto> responseDtoList = participantService.saveParticipant(partyId, body);
-            return Flux.fromIterable(responseDtoList);
+		} catch (NoSuchElementException e) {
+			return Flux.error(e); // 이렇게 하는게 아닐텐데...
+		}
+	}
 
-        } catch (NoSuchElementException e) {
-            return Flux.error(e); // 이렇게 하는게 아닐텐데...
-        }
-    }
+	@Operation(summary = "모임 참여")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true),
+			@ApiImplicitParam(name = "participantId", value = "참여자id", dataType = "long", required = true)
+	})
+	@ResponseStatus(HttpStatus.OK)
+	@PostMapping("/{partyId}/participants/{participantId}")
+	public void joinParty(@PathVariable Long partyId, @PathVariable Long participantId) {
+		Party party = partyService.retrieveParty(partyId);
+		Participant participant = participantService.retrieveParticipant(participantId);
 
-    @Operation(summary = "모임 참여")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "partyId", value = "모임id", dataType = "long", required = true),
-            @ApiImplicitParam(name = "participantId", value = "참여자id", dataType = "long", required = true)
-    })
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/{partyId}/participants/{participantId}")
-    public void joinParty(@PathVariable Long partyId, @PathVariable Long participantId) {
-        Party party = partyService.retrieveParty(partyId);
-        Participant participant = participantService.retrieveParticipant(participantId);
+		if (!Objects.equals(party.getId(), participant.getId())) {
+			participant.setParty(party);
+			participantService.saveParticipant(participant);
+		}
 
-        if (!Objects.equals(party.getId(), participant.getId())) {
-            participant.setParty(party);
-            participantService.saveParticipant(participant);
-        }
+		throw new NoSuchElementException();
+	}
 
-        throw new NoSuchElementException();
-    }
+	@PostMapping("/{partyId}/participants/enter")
+	public Mono<IdDto> enterParty(@PathVariable Long partyId,
+	                              @Valid @RequestBody ParticipantCreateDto body) {
+		Long participantId = participantService.enterPartyBy(partyId, body);
+		return Mono.just(IdDto.of(participantId));
+	}
+
 }

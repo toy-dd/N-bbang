@@ -6,15 +6,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @ApiModel
 @Getter
 @Builder
 @ToString
 public class ParticipantCreateDto {
 
-    @Schema(description = "이름", required = true)
-    private String name;
+	@NotBlank
+	@Schema(description = "참여자명", required = true)
+	private String name;
 
-    @Schema(description = "이메일", required = true)
-    private String email;
+	@Email
+	@Schema(description = "참여자 이메일")
+	private String email;
 }

@@ -1,5 +1,6 @@
 package com.toydd.nbbang.participant;
 
+import com.toydd.nbbang.model.enums.ParticipantRole;
 import com.toydd.nbbang.domain.BaseEntity;
 import com.toydd.nbbang.domain.PaymentParticipant;
 import com.toydd.nbbang.party.Party;
@@ -28,12 +29,15 @@ public class Participant extends BaseEntity {
     @Column
     private String email;
 
-    @ManyToOne (cascade = CascadeType.PERSIST)
+    @ManyToOne (cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Party party;
 
     @OneToMany(mappedBy = "participant")
     private List<PaymentParticipant> paymentParticipantList;
+
+    @Column(name = "role")
+    private ParticipantRole role;
 
     @Builder
     public Participant(String name, String email, Party party, List<PaymentParticipant> paymentParticipantList) {
@@ -41,5 +45,9 @@ public class Participant extends BaseEntity {
         this.email = email;
         this.party = party;
         this.paymentParticipantList = paymentParticipantList;
+    }
+
+    public void entered() {
+        this.role = ParticipantRole.PARTICIPANT;
     }
 }
